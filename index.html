@@ -11,6 +11,8 @@
     --accent-soft:#dde5ef;
     --brass:#a8763b;
     --brass-soft:#f1e6d4;
+    --critical:#a3271e;
+    --critical-soft:#f6dcd9;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
@@ -23,6 +25,8 @@
       --accent-soft:#25344a;
       --brass:#d3a862;
       --brass-soft:#3a3021;
+      --critical:#ff7a6b;
+      --critical-soft:#3d2320;
     }
   }
   :root[data-theme="dark"]{
@@ -35,6 +39,8 @@
     --accent-soft:#25344a;
     --brass:#d3a862;
     --brass-soft:#3a3021;
+    --critical:#ff7a6b;
+    --critical-soft:#3d2320;
   }
 
   *{box-sizing:border-box;}
@@ -101,7 +107,7 @@
     display:flex;
     flex-wrap:wrap;
     gap:.5rem;
-    margin:1.6rem 0 2rem;
+    margin:1.6rem 0 .8rem;
   }
   .chip{
     font-family:"IBM Plex Mono", monospace;
@@ -123,6 +129,24 @@
     color:var(--paper);
   }
   .chip:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .chip.chip-critical[aria-pressed="true"]{ background:var(--critical); border-color:var(--critical); }
+  .chip.chip-critical:hover{ border-color:var(--critical); color:var(--critical); }
+
+  .legend{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.68rem;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:.4rem;
+    margin:0 0 1.6rem;
+  }
+  .legend .swatch{
+    width:10px;height:10px;
+    border-radius:1px;
+    background:var(--critical);
+    display:inline-block;
+  }
 
   /* Briefing grid */
   .grid{
@@ -141,6 +165,11 @@
     display:flex;
     flex-direction:column;
     gap:.6rem;
+    border-left:3px solid transparent;
+  }
+  .card.critical{
+    border-left:3px solid var(--critical);
+    background:linear-gradient(to right, var(--critical-soft), var(--surface) 14rem);
   }
   .card-meta{
     display:flex;
@@ -155,6 +184,14 @@
   .tag{
     color:var(--brass);
     font-weight:500;
+  }
+  .badge-critical{
+    background:var(--critical-soft);
+    color:var(--critical);
+    font-weight:600;
+    padding:.1rem .45rem;
+    border-radius:2px;
+    letter-spacing:.08em;
   }
   .card h2{
     font-family:"Fraunces", Georgia, serif;
@@ -204,7 +241,7 @@
     <h1>OSINT-bulletinen</h1>
     <div class="masthead-meta">
       <span>Ögonblicksbild hämtad <b>30 aug 2026</b></span>
-      <span>8 poster &middot; 5 kategorier</span>
+      <span>13 poster &middot; 5 kategorier &middot; 3 markerade som kritiska</span>
     </div>
   </div>
 
@@ -215,7 +252,10 @@
     <button class="chip" aria-pressed="false" data-filter="forsvar">Försvar</button>
     <button class="chip" aria-pressed="false" data-filter="geopolitik">Geopolitik</button>
     <button class="chip" aria-pressed="false" data-filter="verktyg">Verktyg</button>
+    <button class="chip chip-critical" aria-pressed="false" data-filter="kritisk">Kritiska</button>
   </div>
+
+  <div class="legend"><span class="swatch"></span>Röd kantmarkering = allvarlig eller viktig händelse, t.ex. hot mot valsäkerhet</div>
 
   <div class="grid" id="grid">
 
@@ -268,6 +308,41 @@
       <a class="source" href="https://www.osintcombine.com/event/us-osint-symposium-2026" target="_blank" rel="noopener">OSINT Combine ↗</a>
     </article>
 
+    <article class="card critical" data-cat="geopolitik">
+      <div class="card-meta"><span class="badge-critical">Kritiskt</span><span class="tag">Geopolitik</span><span>&middot;</span><span>Apr 2026</span></div>
+      <h2>Kina, Iran och Ryssland väntas gå emot USA:s midterms 2026</h2>
+      <p>I vittnesmål inför senatens försvarsutskott i april bekräftade underrättelsetjänsterna att utländsk påverkan mot höstens mellanårsval är att vänta, i linje med mönstren från tidigare valcykler.</p>
+      <a class="source" href="https://www.cnn.com/2026/04/30/politics/cyber-team-midterm-elections-foreign-meddling" target="_blank" rel="noopener">CNN Politics ↗</a>
+    </article>
+
+    <article class="card critical" data-cat="geopolitik">
+      <div class="card-meta"><span class="badge-critical">Kritiskt</span><span class="tag">Geopolitik</span><span>&middot;</span><span>2026</span></div>
+      <h2>Nedskärningar gör amerikanska val mer sårbara för påverkan</h2>
+      <p>Brennan Center for Justice varnar för att Trump-administrationens neddragningar av personal och program för att upptäcka utländska desinformationskampanjer försvagar skyddet inför valet — mitt under ett valår.</p>
+      <a class="source" href="https://www.brennancenter.org/our-work/analysis-opinion/trump-administration-cuts-make-elections-more-vulnerable-foreign" target="_blank" rel="noopener">Brennan Center for Justice ↗</a>
+    </article>
+
+    <article class="card critical" data-cat="teknik">
+      <div class="card-meta"><span class="badge-critical">Kritiskt</span><span class="tag">Teknik &amp; verifiering</span><span>&middot;</span><span>2026</span></div>
+      <h2>Klonade nyhetssajter sprider vilseledande valinnehåll</h2>
+      <p>Check Point rapporterar att aktörer klonat varumärken som Reuters, Washington Post och Fox News via lookalike-domäner för att sprida falska nyheter inför midterms, medan AI sänker kostnaden för att producera trovärdigt imitationsmaterial.</p>
+      <a class="source" href="https://blog.checkpoint.com/exposure-management/the-2026-u-s-midterms-have-a-cyber-problem-but-its-not-at-the-ballot-box/" target="_blank" rel="noopener">Check Point Research ↗</a>
+    </article>
+
+    <article class="card" data-cat="forsvar">
+      <div class="card-meta"><span class="tag">Försvar</span><span>&middot;</span><span>Maj 2026</span></div>
+      <h2>ODNI utser samordnare för underrättelser om valhot</h2>
+      <p>Office of the Director of National Intelligence har pekat ut två tjänstemän att leda samordningen av underrättelsearbetet kring hot mot valen, i takt med att oron för utländsk inblandning växer.</p>
+      <a class="source" href="https://www.nextgov.com/defense/2026/05/odni-assigns-two-officials-lead-intelligence-coordination-election-threats/413567/" target="_blank" rel="noopener">Nextgov/FCW ↗</a>
+    </article>
+
+    <article class="card" data-cat="bransch">
+      <div class="card-meta"><span class="tag">Bransch</span><span>&middot;</span><span>Jul 2026</span></div>
+      <h2>Kongressen vill se öppen redovisning av USA:s OSINT-budget</h2>
+      <p>Underrättelseutskottet i representanthuset har antagit sin version av 2027 års underrättelselag, som bland annat kräver att DNI redovisar exakt hur mycket myndigheterna investerar i öppen källdata.</p>
+      <a class="source" href="https://federalnewsnetwork.com/intelligence-community/2026/07/ai-audits-and-osint-featured-in-house-intel-bill/" target="_blank" rel="noopener">Federal News Network ↗</a>
+    </article>
+
     <article class="card" data-cat="teknik">
       <div class="card-meta"><span class="tag">Teknik &amp; verifiering</span><span>&middot;</span><span>Live</span></div>
       <h2>Pizzaindex nära Pentagon anses spegla krisaktivitet</h2>
@@ -293,7 +368,9 @@
         chip.setAttribute('aria-pressed','true');
         var f = chip.getAttribute('data-filter');
         cards.forEach(function(card){
-          card.hidden = (f !== 'alla' && card.getAttribute('data-cat') !== f);
+          if(f === 'alla'){ card.hidden = false; }
+          else if(f === 'kritisk'){ card.hidden = !card.classList.contains('critical'); }
+          else{ card.hidden = card.getAttribute('data-cat') !== f; }
         });
       });
     });
