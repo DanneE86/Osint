@@ -102,6 +102,36 @@
     font-weight:500;
   }
 
+  .refresh-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:.7rem;
+    margin-top:1rem;
+  }
+  .refresh-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--paper);
+    background:var(--accent);
+    padding:.5rem .9rem;
+    border-radius:2px;
+    text-decoration:none;
+    transition:opacity .15s ease;
+  }
+  .refresh-btn:hover{ opacity:.85; }
+  .refresh-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .refresh-note{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.68rem;
+    color:var(--muted);
+  }
+
   /* Filter chips */
   .filters{
     display:flex;
@@ -242,6 +272,10 @@
     <div class="masthead-meta">
       <span>Ögonblicksbild hämtad <b>30 aug 2026</b></span>
       <span>13 poster &middot; 5 kategorier &middot; 3 markerade som kritiska</span>
+    </div>
+    <div class="refresh-row">
+      <a class="refresh-btn" href="https://claude.ai/code/routines/trig_013StyD1gqtgkoKGBttL2AxZ" target="_blank" rel="noopener">&#8635; Hämta senaste nu</a>
+      <span class="refresh-note">Öppnar routinen på claude.ai — logga in och klicka &quot;Run&quot; för att köra hämtningen direkt, utanför schemat 04:00/17:00.</span>
     </div>
   </div>
 
