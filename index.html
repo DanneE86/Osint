@@ -1,0 +1,294 @@
+<title>OSINT-bulletinen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#eef0ea;
+    --surface:#ffffff;
+    --surface-line:#dcdfd4;
+    --ink:#1b211d;
+    --muted:#5c655f;
+    --accent:#33507c;
+    --accent-soft:#dde5ef;
+    --brass:#a8763b;
+    --brass-soft:#f1e6d4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#11151b;
+      --surface:#1a2028;
+      --surface-line:#2a323d;
+      --ink:#e7e6de;
+      --muted:#98a1a8;
+      --accent:#7fa3d4;
+      --accent-soft:#25344a;
+      --brass:#d3a862;
+      --brass-soft:#3a3021;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#11151b;
+    --surface:#1a2028;
+    --surface-line:#2a323d;
+    --ink:#e7e6de;
+    --muted:#98a1a8;
+    --accent:#7fa3d4;
+    --accent-soft:#25344a;
+    --brass:#d3a862;
+    --brass-soft:#3a3021;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Public Sans", system-ui, sans-serif;
+    line-height:1.5;
+  }
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 4rem;
+  }
+
+  /* Masthead */
+  .masthead{
+    display:flex;
+    flex-direction:column;
+    gap:.6rem;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:1.1rem;
+    margin-bottom:.4rem;
+  }
+  .kicker{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+  }
+  .kicker .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--brass);
+    box-shadow:0 0 0 3px var(--brass-soft);
+  }
+  h1{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3rem);
+    letter-spacing:-.01em;
+    margin:0;
+    text-wrap:balance;
+  }
+  .masthead-meta{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:.5rem 1.5rem;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.74rem;
+    color:var(--muted);
+  }
+  .masthead-meta span b{
+    color:var(--ink);
+    font-weight:500;
+  }
+
+  /* Filter chips */
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem;
+    margin:1.6rem 0 2rem;
+  }
+  .chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.7rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:.4rem .75rem;
+    border:1px solid var(--surface-line);
+    border-radius:2px;
+    background:var(--surface);
+    color:var(--muted);
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .chip:hover{ border-color:var(--accent); color:var(--ink); }
+  .chip[aria-pressed="true"]{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--paper);
+  }
+  .chip:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* Briefing grid */
+  .grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1px;
+    background:var(--surface-line);
+    border:1px solid var(--surface-line);
+  }
+  @media (min-width:680px){
+    .grid{ grid-template-columns:1fr 1fr; }
+  }
+  .card{
+    background:var(--surface);
+    padding:1.5rem 1.6rem;
+    display:flex;
+    flex-direction:column;
+    gap:.6rem;
+  }
+  .card-meta{
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.68rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .tag{
+    color:var(--brass);
+    font-weight:500;
+  }
+  .card h2{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:600;
+    font-size:1.22rem;
+    line-height:1.28;
+    margin:0;
+    text-wrap:balance;
+  }
+  .card p{
+    margin:0;
+    color:var(--muted);
+    font-size:.92rem;
+    max-width:60ch;
+  }
+  .card a.source{
+    margin-top:auto;
+    padding-top:.5rem;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem;
+    color:var(--accent);
+    text-decoration:none;
+    border-top:1px solid var(--surface-line);
+  }
+  .card a.source:hover{ text-decoration:underline; }
+  .card a.source:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .card[hidden]{ display:none; }
+
+  footer{
+    margin-top:2.5rem;
+    padding-top:1.2rem;
+    border-top:1px solid var(--surface-line);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:.5rem 1.5rem;
+  }
+  footer a{ color:var(--muted); }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <div class="kicker"><span class="dot"></span>Öppen källdata &middot; sammanställd bulletin</div>
+    <h1>OSINT-bulletinen</h1>
+    <div class="masthead-meta">
+      <span>Ögonblicksbild hämtad <b>30 aug 2026</b></span>
+      <span>7 poster &middot; 5 kategorier</span>
+    </div>
+  </div>
+
+  <div class="filters" id="filters" role="group" aria-label="Filtrera efter kategori">
+    <button class="chip" aria-pressed="true" data-filter="alla">Alla</button>
+    <button class="chip" aria-pressed="false" data-filter="teknik">Teknik &amp; verifiering</button>
+    <button class="chip" aria-pressed="false" data-filter="bransch">Bransch</button>
+    <button class="chip" aria-pressed="false" data-filter="forsvar">Försvar</button>
+    <button class="chip" aria-pressed="false" data-filter="geopolitik">Geopolitik</button>
+    <button class="chip" aria-pressed="false" data-filter="verktyg">Verktyg</button>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="card" data-cat="teknik">
+      <div class="card-meta"><span class="tag">Teknik &amp; verifiering</span><span>&middot;</span><span>20 aug</span></div>
+      <h2>Google drar tillbaka AI-genererade satellitbilder i Earth</h2>
+      <p>Efter kritik från OSINT-communityn rullades en ny bildgenereringsfunktion i Google Earth tillbaka, sedan researchers visat att den kunde skapa övertygande men helt fabricerade scener — falska bombkratrar, militära anläggningar och katastrofbilder.</p>
+      <a class="source" href="https://osintech.substack.com/p/osintechs-timeline-176-20082026" target="_blank" rel="noopener">OSINTech Timeline #176 ↗</a>
+    </article>
+
+    <article class="card" data-cat="bransch">
+      <div class="card-meta"><span class="tag">Bransch</span><span>&middot;</span><span>Aug</span></div>
+      <h2>Maltego förvärvar bevissäkringsverktyget Hunchly</h2>
+      <p>Münchenbaserade Maltego Technologies meddelar att man köpt Hunchly, verktyget utredare använder för att fånga och bevara digitala bevis under pågående utredningar.</p>
+      <a class="source" href="https://osint-news.com/" target="_blank" rel="noopener">OSINT-news.com ↗</a>
+    </article>
+
+    <article class="card" data-cat="forsvar">
+      <div class="card-meta"><span class="tag">Försvar</span><span>&middot;</span><span>Aug (sen)</span></div>
+      <h2>Amerikansk-finskt OSINT-samarbete genomfört i Finland</h2>
+      <p>USA:s 66:e militärunderrättelsebrigad (Northern Raven Team) och finska armén genomförde ett gemensamt uppdrag för insamling av öppen källdata i Finland i slutet av augusti.</p>
+      <a class="source" href="https://intelligencecommunitynews.com/tag/osint/" target="_blank" rel="noopener">Intelligence Community News ↗</a>
+    </article>
+
+    <article class="card" data-cat="geopolitik">
+      <div class="card-meta"><span class="tag">Geopolitik</span><span>&middot;</span><span>Sen aug</span></div>
+      <h2>Öppna källor visar rysk raffinaderikapacitet i fritt fall</h2>
+      <p>Geospatial och öppen källdata pekar på att rysk bensinproduktion fallit till runt 70&nbsp;% av efterfrågan sedan ukrainska drönarattacker slog ut raffinaderier i Perm, Nizjnij Novgorod och Jaroslavl.</p>
+      <a class="source" href="https://www.opsimathy.co.uk/2026/08/04/weekly-osint-news-roundup/" target="_blank" rel="noopener">Weekly OSINT Roundup ↗</a>
+    </article>
+
+    <article class="card" data-cat="verktyg">
+      <div class="card-meta"><span class="tag">Verktyg</span><span>&middot;</span><span>Aug</span></div>
+      <h2>Altia lanserar &quot;OSINT Investigator&quot;</h2>
+      <p>Den nya produkten är byggd för att övervaka, fånga och hantera öppen källdata som en integrerad del av utredningsarbete, från första tips till färdigt underlag.</p>
+      <a class="source" href="https://thehackernews.com/search/label/OSINT" target="_blank" rel="noopener">The Hacker News – OSINT ↗</a>
+    </article>
+
+    <article class="card" data-cat="bransch">
+      <div class="card-meta"><span class="tag">Bransch</span><span>&middot;</span><span>Aug</span></div>
+      <h2>ShadowDragon ingår partnerskap med Investigo-gruppen</h2>
+      <p>Leverantören av etisk OSINT-data, unika dataset och API:er meddelar ett strategiskt partnerskap med Collaboraite och Vestigo Consulting, båda delar av Investigo Group.</p>
+      <a class="source" href="https://osint-news.com/" target="_blank" rel="noopener">OSINT-news.com ↗</a>
+    </article>
+
+    <article class="card" data-cat="teknik">
+      <div class="card-meta"><span class="tag">Konferens</span><span>&middot;</span><span>5–6 aug</span></div>
+      <h2>Första amerikanska OSINT-symposiet hölls i Washington DC</h2>
+      <p>Symposiet samlade praktiker kring temat &quot;Decision Advantage&quot; — hur öppen källdata kan stödja snabba och försvarbara beslut i komplexa lägen.</p>
+      <a class="source" href="https://www.osintcombine.com/event/us-osint-symposium-2026" target="_blank" rel="noopener">OSINT Combine ↗</a>
+    </article>
+
+  </div>
+
+  <footer>
+    <span>Manuellt sammanställd via webbsökning — inte ett automatiskt live-flöde.</span>
+    <span>Källor: <a href="https://thehackernews.com/search/label/OSINT" target="_blank" rel="noopener">The Hacker News</a>, <a href="https://osint-news.com/" target="_blank" rel="noopener">OSINT-news</a>, <a href="https://osintech.substack.com/" target="_blank" rel="noopener">OSINTech</a></span>
+  </footer>
+</div>
+
+<script>
+  (function(){
+    var chips = document.querySelectorAll('.chip');
+    var cards = document.querySelectorAll('.card');
+    chips.forEach(function(chip){
+      chip.addEventListener('click', function(){
+        chips.forEach(function(c){ c.setAttribute('aria-pressed','false'); });
+        chip.setAttribute('aria-pressed','true');
+        var f = chip.getAttribute('data-filter');
+        cards.forEach(function(card){
+          card.hidden = (f !== 'alla' && card.getAttribute('data-cat') !== f);
+        });
+      });
+    });
+  })();
+</script>
